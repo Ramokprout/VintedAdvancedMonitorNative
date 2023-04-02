@@ -55,7 +55,7 @@ public:
         this->initImGui();
     }
 
-    ImVec4 hexToVec4(const std::string& hex)
+    ImVec4 hexToVec4(const std::string& hex, float alpha = 1.0f)
     {
         unsigned int hexValue = std::stoul(hex.substr(1), nullptr, 16);
 
@@ -63,7 +63,7 @@ public:
         float g = static_cast<float>((hexValue >> 8) & 0xFF) / 255.f;
         float b = static_cast<float>((hexValue) & 0xFF) / 255.f;
 
-        return ImVec4(r, g, b, 1.0f);
+        return ImVec4(r, g, b, alpha);
     }
 
     void initImGui();
@@ -86,23 +86,3 @@ protected:
     EventCallbackFn m_eventCallback;
 };
 
-class VintedWindow : public GLFWWindow
-{
-public:
-
-    VintedWindow(vinted* client) : GLFWWindow(700, 500, "Vinted Monitor Configuration") {
-        this->m_client = client;
-    }
-
-    using GLFWWindow::GLFWWindow;
-
-    void initStyle();
-
-protected:
-    void drawButton(const std::string& name);
-
-    void drawImGuiContent() override;
-
-private:
-    vinted* m_client;
-};

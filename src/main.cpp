@@ -1,5 +1,5 @@
 #include "public/vinted.h"
-#include "public/window.h"
+#include "public/vintedwindow.h"
 
 int main(void)
 {

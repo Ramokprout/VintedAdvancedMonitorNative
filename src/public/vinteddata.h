@@ -11,18 +11,19 @@ public:
         this->fetchBrands();
     }
 
-    //cette fonction récupère toutes les marques disponibles sur vinted et les met dans un std::unordered_map
+    // cette fonction récupère toutes les marques disponibles sur vinted et les met dans un std::unordered_map
 
-    std::unordered_map<std::string, brand_t> getCachedBrands() const {
-        return this->brands;
-    }
-    
-
-    ~vinteddata()
+    std::unordered_map<std::string, brand_t> getCachedBrands() const
     {
+        return this->brands;
     }
 
 private:
+    ~vinteddata()
+    {
+        this->brands.clear();
+        this->colors.clear();
+    }
 
     void fetchBrands();
 

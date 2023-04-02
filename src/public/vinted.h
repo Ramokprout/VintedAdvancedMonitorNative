@@ -26,6 +26,10 @@ public:
         return this->m_data;
     }
 
+    std::shared_ptr<vintedlogger> GetLogger() const {
+        return this->m_logger;
+    }
+
     ~vinted()
     {
         delete this->m_rest;
