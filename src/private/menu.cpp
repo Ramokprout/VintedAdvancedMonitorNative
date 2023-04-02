@@ -1,3 +1,7 @@
+#include <string>
+#include <algorithm>
+#include <cctype>
+
 #include "../public/vintedwindow.h"
 #include "../public/menuconstants.h"
 
@@ -32,7 +36,8 @@ void VintedWindow::drawImGuiContent()
     ImGui::End();
 }
 
-void VintedWindow::drawTabSelector() {
+void VintedWindow::drawTabSelector()
+{
     ImGui::SetCursorPos({0.f, 0.f});
     ImGui::PushStyleColor(ImGuiCol_ChildBg, this->hexToVec4(TABSELECTOR_BACKGROUND_COLOR));
     if (ImGui::BeginChild("##selectmenu", TABSELECTOR_SIZE, true))
@@ -52,14 +57,79 @@ void VintedWindow::drawTabSelector() {
     ImGui::SameLine();
 }
 
-void VintedWindow::drawWindowContent(ImVec2 size) {
+void VintedWindow::drawWindowContent(ImVec2 size)
+{
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + INITIAL_CONTENT_WINDOW_PADDING);
     if (ImGui::BeginChild("##content", size, false))
     {
-        ImGui::Text("Contenu de la fenetre");
-        ImGui::Text("Contenu de la fenetre");
-        ImGui::Text("Contenu de la fenetre");
-        ImGui::Text("Contenu de la fenetre");
+        switch (this->activeTab)
+        {
+        case categories_e::VINTEDCACA:
+            this->firstMenu();
+            break;
+        case categories_e::VINTEDSTP:
+            this->secondMenu();
+            break;
+        case categories_e::MAXIPROUT:
+            this->thirdMenu();
+            break;
+        case categories_e::AAAAAAAAAAAA:
+            this->fourthMenu();
+            break;
+        }
         ImGui::EndChild();
     }
+}
+
+void VintedWindow::firstMenu()
+{
+
+    ImGui::SetNextItemWidth(FIRSTMENU_BRANDSELECTOR_WIDTH);
+    if (ImGui::BeginListBox("slt"))
+    {
+        ImGui::InputText("Search", this->queryGenerator.searchString, 256);
+
+        std::unordered_map<std::string, brand_t> brands = this->m_client->GetData()->getCachedBrands();
+        std::vector<brand_t> filteredBrands; // vecteur pour stocker les marques filtrées
+
+        // filtrer les marques en fonction de la valeur de searchString
+        for (const auto &brand : brands)
+        {
+            std::string lowercaseBrandTitle = brand.second.title;
+            std::transform(lowercaseBrandTitle.begin(), lowercaseBrandTitle.end(), lowercaseBrandTitle.begin(), [](unsigned char c)
+                           { return std::tolower(c); });
+            std::string lowercaseSearchString(this->queryGenerator.searchString);
+            std::transform(lowercaseSearchString.begin(), lowercaseSearchString.end(), lowercaseSearchString.begin(), [](unsigned char c)
+                           { return std::tolower(c); });
+
+            if (lowercaseSearchString.empty() || lowercaseBrandTitle.find(lowercaseSearchString) != std::string::npos)
+            {
+                filteredBrands.push_back(brand.second);
+            }
+        }
+
+        // afficher la liste des marques filtrées
+        for (const auto &brand : filteredBrands)
+        {
+            if (ImGui::Selectable(brand.title.c_str()))
+            {
+          
+            }
+        }
+
+
+        ImGui::EndListBox();
+    }
+}
+void VintedWindow::secondMenu()
+{
+    ImGui::Text("deuxieme menu");
+}
+void VintedWindow::thirdMenu()
+{
+    ImGui::Text("3eme menu");
+}
+void VintedWindow::fourthMenu()
+{
+    ImGui::Text("4eme menu");
 }

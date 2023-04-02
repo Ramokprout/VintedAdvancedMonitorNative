@@ -1,16 +1,13 @@
 #include <array>
 #include "window.h"
 
-static std::array<std::string, 4> CATEGORIES{
-    {"VintedCaca", "VintedStp", "Pénétration", "ANNA KAPLANIAN"}
-};
-
 class VintedWindow : public GLFWWindow
 {
 public:
 
     VintedWindow(vinted* client) : GLFWWindow(700, 500, "Vinted Monitor Configuration") {
         this->m_client = client;
+        memset(this->queryGenerator.searchString, 0, 256);
     }
 
     using GLFWWindow::GLFWWindow;
@@ -25,7 +22,17 @@ protected:
     void drawTabSelector();
     void drawWindowContent(ImVec2 size);
 
+    void firstMenu();
+    void secondMenu();
+    void thirdMenu();
+    void fourthMenu();
+
 private:
     vinted* m_client;
     int activeTab = 0;
+
+    struct {
+        char searchString[256];
+        bool temp;
+    } queryGenerator;
 };

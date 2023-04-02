@@ -6,7 +6,6 @@
 #include "vintedrest.h"
 #include "vinteddata.h"
 
-
 class vinted
 {
 public:
@@ -25,7 +24,6 @@ public:
     vinteddata *GetData() const {
         return this->m_data;
     }
-
     std::shared_ptr<vintedlogger> GetLogger() const {
         return this->m_logger;
     }
@@ -33,6 +31,7 @@ public:
     ~vinted()
     {
         delete this->m_rest;
+        delete this->m_data;
     }
 
 private:
