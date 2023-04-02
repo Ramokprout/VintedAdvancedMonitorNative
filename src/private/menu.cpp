@@ -108,17 +108,35 @@ void VintedWindow::firstMenu()
             }
         }
 
-        // afficher la liste des marques filtrées
         for (const auto &brand : filteredBrands)
         {
-            if (ImGui::Selectable(brand.title.c_str()))
+            bool isBrandSelected = std::any_of(this->queryGenerator.selectedBrands.begin(), this->queryGenerator.selectedBrands.end(), [&](const auto &selectedBrand)
+                                               { return selectedBrand->id == brand.id; });
+            if (ImGui::Selectable(brand.title.c_str(), isBrandSelected))
             {
-          
+                if (isBrandSelected)
+                {
+                    this->queryGenerator.selectedBrands.erase(std::find_if(this->queryGenerator.selectedBrands.begin(), this->queryGenerator.selectedBrands.end(), [&](const auto &selectedBrand)
+                                                                           { return selectedBrand->id == brand.id; }));
+                }
+                else
+                {
+                    this->queryGenerator.selectedBrands.insert(std::make_shared<brand_t>(brand));
+                }
             }
         }
 
-
         ImGui::EndListBox();
+    }
+
+    ImGui::BulletText(fmt::format("Selected elements: {}", this->queryGenerator.selectedBrands.size()).c_str());
+
+    if (ImGui::Button("Print selected brands"))
+    {
+        for (auto &brand : this->queryGenerator.selectedBrands)
+        {
+            std::cout << brand->title << std::endl;
+        }
     }
 }
 void VintedWindow::secondMenu()

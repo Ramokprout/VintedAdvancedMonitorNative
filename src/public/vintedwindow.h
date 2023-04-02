@@ -33,6 +33,6 @@ private:
 
     struct {
         char searchString[256];
-        bool temp;
+        std::set<std::shared_ptr<brand_t>> selectedBrands;
     } queryGenerator;
 };
